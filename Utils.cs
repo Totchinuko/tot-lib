@@ -434,7 +434,7 @@ public static class Utils
 #else
             string tag = string.Empty;
 #endif
-        return $"{fvi.FileMajorPart}.{fvi.FileMinorPart}.{fvi.FileBuildPart}{tag}";
+        return $"{fvi.FileMajorPart}.{fvi.FileMinorPart}.{fvi.FileBuildPart}.{fvi.FilePrivatePart}{tag}";
     }
     
     public static long Clamp2CpuThreads(long value)

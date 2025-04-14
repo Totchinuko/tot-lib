@@ -12,7 +12,12 @@ public class GithubUpdater : IUpdater
         Repo = repo;
         ContentType = contentType;
     }
+    #if DEBUG
+    public const string ReleaseUrl = "http://localhost:5050/repos/{0}/{1}/releases";
+    #else
     public const string ReleaseUrl = "https://api.github.com/repos/{0}/{1}/releases";
+    #endif
+    
     public const string WindowsMimeType = "application/x-msdownload";
     
     public string Owner { get; }

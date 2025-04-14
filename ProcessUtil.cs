@@ -71,4 +71,11 @@ public static class ProcessUtil
             return null;
         return FileVersionInfo.GetVersionInfo(Environment.ProcessPath);
     }
+
+    public static AppVersion GetAppVersion()
+    {
+        var fvi = GetFileVersion();
+        if(fvi is null) return AppVersion.Default;
+        return new AppVersion(fvi);
+    }
 }

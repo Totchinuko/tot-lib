@@ -424,6 +424,15 @@ public static class Utils
         return reader.ReadToEnd();
     }
 
+    public static string GetEmbeddedTextFile<T>(string path)
+    {
+        var assembly = typeof(T).Assembly;
+        using var stream = assembly.GetManifestResourceStream(path) ??
+                           throw new Exception($"Could not find resource {path}.");
+        using var reader = new StreamReader(stream);
+        return reader.ReadToEnd();
+    }
+
     public static long Clamp2CpuThreads(long value)
     {
         var maxCpu = Environment.ProcessorCount;

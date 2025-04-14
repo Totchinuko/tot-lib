@@ -424,19 +424,6 @@ public static class Utils
         return reader.ReadToEnd();
     }
 
-    public static string GetFileVersion()
-    {
-        if (string.IsNullOrEmpty(Environment.ProcessPath))
-            return string.Empty;
-        var fvi = FileVersionInfo.GetVersionInfo(Environment.ProcessPath);
-#if DEBUG
-        string tag = " [Dev]";
-#else
-            string tag = string.Empty;
-#endif
-        return $"{fvi.FileMajorPart}.{fvi.FileMinorPart}.{fvi.FileBuildPart}.{fvi.FilePrivatePart}{tag}";
-    }
-    
     public static long Clamp2CpuThreads(long value)
     {
         var maxCpu = Environment.ProcessorCount;
@@ -444,37 +431,5 @@ public static class Utils
             if (i >= maxCpu)
                 value &= ~(1L << i);
         return value;
-    }
-    
-    public static async Task<GitCommand.ReadToEndResult> ReadToEnd(Process proc)
-    {
-        return await Task.Run(() =>
-        {
-            try
-            {
-                proc.Start();
-            }
-            catch (Exception e)
-            {
-                return new GitCommand.ReadToEndResult()
-                {
-                    IsSuccess = false,
-                    StdOut = string.Empty,
-                    StdErr = e.Message,
-                };
-            }
-
-            var rs = new GitCommand.ReadToEndResult()
-            {
-                StdOut = proc.StandardOutput.ReadToEnd(),
-                StdErr = proc.StandardError.ReadToEnd(),
-            };
-
-            proc.WaitForExit();
-            rs.IsSuccess = proc.ExitCode == 0;
-            proc.Close();
-
-            return rs;
-        });
     }
 }

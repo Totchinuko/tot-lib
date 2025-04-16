@@ -11,6 +11,13 @@ public static class ConsoleExtensions
         console.ResetColor();
     }
     
+    public static void WriteLine(this IColoredConsole console, ConsoleColor foregroundColor, string output)
+    {
+        console.ForegroundColor = foregroundColor;
+        console.WriteLine(output);
+        console.ResetColor();
+    }
+    
     public static void WriteLines(this IColoredConsole console, ConsoleColor foregroundColor, params string[] output)
     {
         console.ForegroundColor = foregroundColor;

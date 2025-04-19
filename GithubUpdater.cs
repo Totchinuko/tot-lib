@@ -1,5 +1,6 @@
 using System.Net.Quic;
 using System.Reflection.Metadata;
+using System.Text;
 using System.Text.Json;
 
 namespace tot_lib;
@@ -46,7 +47,7 @@ public class GithubUpdater : IUpdater
             var asset = latest.Assets.First(x => x.ContentType == ContentType);
             IsUpToDate = false;
             Name = latest.Name;
-            Body = latest.Body;
+            Body = AggregatePastUpdates(currentVersion, releases);
             Date = latest.PublishedAt;
             Url = asset.BrowserDownloadUrl;
             Size = asset.Size;
@@ -84,5 +85,24 @@ public class GithubUpdater : IUpdater
         fileStream.Close();
 
         return file.FullName;
+    }
+
+    private string AggregatePastUpdates(AppVersion current, List<GithubRelease> releases)
+    {
+        StringBuilder _aggregator = new();
+        foreach (var release in releases)
+        {
+            var onlineVersion = new AppVersion(release.Name);
+            if (onlineVersion.CompareTo(current) > 0)
+            {
+                _aggregator.AppendLine($"# {release.Name}");
+                _aggregator.AppendLine(release.Body);
+                _aggregator.AppendLine();
+                _aggregator.AppendLine();
+            }
+            else break;
+        }
+
+        return _aggregator.ToString();
     }
 }

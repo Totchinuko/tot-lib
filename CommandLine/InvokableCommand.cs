@@ -1,6 +1,7 @@
 ﻿using System.CommandLine.Invocation;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace tot_lib.CommandLine;
 
@@ -24,6 +25,7 @@ internal class InvokableCommand<[DynamicallyAccessedMembers(DynamicallyAccessedM
 
         var collection = new ServiceCollection();
         _serviceConfiguration.Invoke(collection);
+        collection.TryAddSingleton(context.Console);
         collection.AddTransient(typeof(TCommand));
         var provider = collection.BuildServiceProvider();
 

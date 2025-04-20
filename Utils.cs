@@ -88,13 +88,6 @@ public static class Utils
         return RemoveRootFolder(path, root.FullName);
     }
 
-    public static void CreateTot<
-        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] T>
-        (this RootCommand root, Action<IServiceCollection> serviceConfiguration) where T : class, ITotCommand
-    {
-        root.AddCommand(TotCommand.Create<T>(serviceConfiguration));
-    }
-
     public static T? GetAssemblyAttribute<T>(this Type type) where T : Attribute
     {
         Assembly assembly = type.Assembly;

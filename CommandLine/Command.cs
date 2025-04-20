@@ -10,5 +10,4 @@ internal class Command<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
     public Command(string name, string? description = null) : base(name, description)
     {
     }
-
 }

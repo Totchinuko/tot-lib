@@ -4,7 +4,9 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace tot_lib.CommandLine;
 
-internal class Option<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]TCommand, TValue> : System.CommandLine.Option<TValue> where TCommand : class,ICommand<TCommand>
+internal class Option<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]TCommand, TValue> : 
+    System.CommandLine.Option<TValue>, IValueSetter<TCommand>
+    where TCommand : class,ICommand<TCommand>
 {
     public Option(string name, string? description = null) : base(name, description)
     {

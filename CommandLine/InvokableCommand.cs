@@ -30,6 +30,14 @@ internal class InvokableCommand<[DynamicallyAccessedMembers(DynamicallyAccessedM
         var command = provider.GetRequiredService(typeof(TCommand)) as TCommand;
         if (command is null)
             throw new NullReferenceException("Command failed to initialize");
+        
+        foreach (var option in Options)
+            if(option is IValueSetter<TCommand> setter)
+                setter.SetValue(command, context);
+        foreach (var argument in Arguments)
+            if(argument is IValueSetter<TCommand> setter)
+                setter.SetValue(command, context);
+        
         return command.InvokeAsync(context.GetCancellationToken());
     }
 }

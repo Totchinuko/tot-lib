@@ -117,7 +117,7 @@ public static class Utils
 
     public static int GetErrorCode(this Exception exception)
     {
-        return Marshal.GetHRForException(exception) & ((1 << 16) - 1);
+        return Math.Max(1,Marshal.GetHRForException(exception) & ((1 << 16) - 1));
     }
     
     public static async Task WaitUntil(Func<bool> condition, int frequency = 25, int timeout = -1)

@@ -111,8 +111,13 @@ public static class Utils
     const int ERROR_LOCK_VIOLATION = 33;
     public static bool IsFileLocked(Exception exception)
     {
-        int errorCode = Marshal.GetHRForException(exception) & ((1 << 16) - 1);
+        var errorCode = exception.GetErrorCode();
         return errorCode == ERROR_SHARING_VIOLATION || errorCode == ERROR_LOCK_VIOLATION;
+    }
+
+    public static int GetErrorCode(this Exception exception)
+    {
+        return Marshal.GetHRForException(exception) & ((1 << 16) - 1);
     }
     
     public static async Task WaitUntil(Func<bool> condition, int frequency = 25, int timeout = -1)

@@ -35,7 +35,7 @@ public class Argument<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes
     
     private Action<TCommand,TValue?>? _setter;
     
-    public void AddSetter(Action<TCommand,TValue?> action)
+    public void SetSetter(Action<TCommand,TValue?> action)
     {
         _setter = action;
     }

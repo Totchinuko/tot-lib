@@ -5,7 +5,7 @@ namespace tot_lib.CommandLine;
 
 public interface IArgument<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]TCommand, TValue> where TCommand : class,ICommand<TCommand>
 {
-    IArgument<TCommand, TValue> AddSetter(Action<TCommand, TValue?> setter);
+    IArgument<TCommand, TValue> SetSetter(Action<TCommand, TValue?> setter);
     IArgument<TCommand, TValue> SetDefault(TValue defaultValue);
     IArgument<TCommand, TValue> AddValidator(ValidateSymbolResult<ArgumentResult> validate);
     IArgument<TCommand, TValue> LegalFileNamesOnly();

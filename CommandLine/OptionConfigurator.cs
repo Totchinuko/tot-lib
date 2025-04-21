@@ -16,7 +16,7 @@ internal class OptionConfigurator<[DynamicallyAccessedMembers(DynamicallyAccesse
 
     public IOption<TCommand, TValue> SetSetter(Action<TCommand, TValue?> setter)
     {
-        option.AddSetter(setter);
+        option.SetSetter(setter);
         return this;
     }
 

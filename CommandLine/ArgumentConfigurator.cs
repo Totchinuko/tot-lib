@@ -9,9 +9,9 @@ internal class ArgumentConfigurator<[DynamicallyAccessedMembers(DynamicallyAcces
     : IArgument<TCommand, TValue>
     where TCommand : class,ICommand<TCommand>
 {
-    public IArgument<TCommand, TValue> AddSetter(Action<TCommand, TValue?> setter)
+    public IArgument<TCommand, TValue> SetSetter(Action<TCommand, TValue?> setter)
     {
-        argument.AddSetter(setter);
+        argument.SetSetter(setter);
         return this;
     }
     

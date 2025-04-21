@@ -1,4 +1,5 @@
-﻿using System.CommandLine.Parsing;
+﻿using System.CommandLine;
+using System.CommandLine.Parsing;
 using System.Diagnostics.CodeAnalysis;
 
 namespace tot_lib.CommandLine;
@@ -13,9 +14,33 @@ internal class OptionConfigurator<[DynamicallyAccessedMembers(DynamicallyAccesse
         return this;
     }
 
-    public IOption<TCommand, TValue> AddSetter(Action<TCommand, TValue?> setter)
+    public IOption<TCommand, TValue> SetSetter(Action<TCommand, TValue?> setter)
     {
         option.AddSetter(setter);
+        return this;
+    }
+
+    public IOption<TCommand, TValue> SetDefault(TValue defaultValue)
+    {
+        option.SetDefaultValue(defaultValue);
+        return this;
+    }
+
+    public IOption<TCommand, TValue> AddValidator(ValidateSymbolResult<OptionResult> validate)
+    {
+        option.AddValidator(validate);
+        return this;
+    }
+
+    public IOption<TCommand, TValue> LegalFileNamesOnly()
+    {
+        option.LegalFileNamesOnly();
+        return this;
+    }
+
+    public IOption<TCommand, TValue> LegalFilePathsOnly()
+    {
+        option.LegalFilePathsOnly();
         return this;
     }
 

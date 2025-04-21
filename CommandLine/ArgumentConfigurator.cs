@@ -1,4 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.CommandLine;
+using System.CommandLine.Parsing;
+using System.Diagnostics.CodeAnalysis;
 
 namespace tot_lib.CommandLine;
 
@@ -10,6 +12,30 @@ internal class ArgumentConfigurator<[DynamicallyAccessedMembers(DynamicallyAcces
     public IArgument<TCommand, TValue> AddSetter(Action<TCommand, TValue?> setter)
     {
         argument.AddSetter(setter);
+        return this;
+    }
+    
+    public IArgument<TCommand, TValue> SetDefault(TValue defaultValue)
+    {
+        argument.SetDefaultValue(defaultValue);
+        return this;
+    }
+
+    public IArgument<TCommand, TValue> AddValidator(ValidateSymbolResult<ArgumentResult> validate)
+    {
+        argument.AddValidator(validate);
+        return this;
+    }
+
+    public IArgument<TCommand, TValue> LegalFileNamesOnly()
+    {
+        argument.LegalFileNamesOnly();
+        return this;
+    }
+
+    public IArgument<TCommand, TValue> LegalFilePathsOnly()
+    {
+        argument.LegalFilePathsOnly();
         return this;
     }
 

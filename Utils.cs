@@ -2,10 +2,14 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO.Compression;
+using System.Net.Mime;
 using System.Reflection;
+using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Win32;
 using tot_lib.Git;
 
 namespace tot_lib;
@@ -459,6 +463,85 @@ public static class Utils
             await destination.WriteAsync(buffer, 0, bytesRead, cancellationToken).ConfigureAwait(false);
             totalBytesRead += bytesRead;
             progress?.Report(totalBytesRead);
+        }
+    }
+
+    public static bool HasLogonRun(string appName)
+    {
+        if (OperatingSystem.IsWindows())
+            return TryGetLogonRunWindows(appName, out _);
+        return false;
+    }
+
+    public static bool TryGetLogonRun(string appName, [NotNullWhen(true)] out string? data)
+    {
+        if (OperatingSystem.IsWindows())
+            return TryGetLogonRunWindows(appName, out data);
+        data = null;
+        return false;
+    }
+
+    [SupportedOSPlatform("windows")]
+    internal static bool TryGetLogonRunWindows(string appName, [NotNullWhen(true)] out string? data)
+    {
+        data = null;
+        try
+        {
+            var rk = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            if (rk is null) return false;
+
+            data = rk.GetValue(appName) as string;
+            return data != null;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    public static bool SetLogonRun(string appName, string data)
+    {
+        if (OperatingSystem.IsWindows())
+            return SetLogonRunWindows(appName, data);
+        return false;
+    }
+    
+    [SupportedOSPlatform("windows")]
+    internal static bool SetLogonRunWindows(string appName, string data)
+    {
+        try
+        {
+            var rk = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            if (rk is null) return false;
+            rk.SetValue(appName, data);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    public static bool RemoveLogonRun(string appName)
+    {
+        if (OperatingSystem.IsWindows())
+            return RemoveLogonRunWindows(appName);
+        return false;
+    }
+    
+    [SupportedOSPlatform("windows")]
+    internal static bool RemoveLogonRunWindows(string appName)
+    {
+        try
+        {
+            var rk = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            if (rk is null) return false;
+            rk.DeleteValue(appName, throwOnMissingValue: false);
+            return true;
+        }
+        catch
+        {
+            return false;
         }
     }
 }

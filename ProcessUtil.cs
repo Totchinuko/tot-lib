@@ -7,20 +7,6 @@ namespace tot_lib;
 
 public static class ProcessUtil
 {
-    public static bool IsProcessElevated()
-    {
-        if (OperatingSystem.IsWindows())
-            return IsProcessElevatedWindows();
-        return false;
-    }
-    
-
-    [SupportedOSPlatform("windows")]
-    private static bool IsProcessElevatedWindows()
-    {
-        return new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
-    }
-    
     public static async Task<GitCommand.ReadToEndResult> ReadToEnd(Process proc)
     {
         return await Task.Run(() =>

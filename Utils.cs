@@ -11,6 +11,7 @@ using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Win32;
 using tot_lib.Git;
+using tot_lib.OsSpecific;
 
 namespace tot_lib;
 
@@ -232,15 +233,6 @@ public static class Utils
             .Where(arg => !string.IsNullOrEmpty(arg));
     }
     
-    public static void SetupSymbolicLink(string path, string targetPath)
-    {
-        if (Directory.Exists(path) && File.GetAttributes(path).HasFlag(FileAttributes.ReparsePoint))
-            JunctionPoint.Delete(path);
-        else if (Directory.Exists(path))
-            Directory.Delete(path, true);
-        JunctionPoint.Create(path, targetPath, true);
-    }
-
     public static IEnumerable<string> Split(this string str, Func<char, bool> controller)
     {
         var nextPiece = 0;
@@ -255,14 +247,6 @@ public static class Utils
         }
 
         yield return str.Substring(nextPiece);
-    }
-    
-    public static void RemoveSymbolicLink(string path)
-    {
-        if (Directory.Exists(path) && File.GetAttributes(path).HasFlag(FileAttributes.ReparsePoint))
-            JunctionPoint.Delete(path);
-        else if (Directory.Exists(path))
-            Directory.Delete(path, true);
     }
     
     public static bool IsDirectoryWritable(string dirPath, bool throwIfFails = false)

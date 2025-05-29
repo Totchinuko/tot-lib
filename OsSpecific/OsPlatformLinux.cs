@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Versioning;
 
-namespace tot_lib;
+namespace tot_lib.OsSpecific;
 
 [SupportedOSPlatform("linux")]
 public class OsPlatformLinux : IOsPlatformSpecific
@@ -25,5 +25,23 @@ public class OsPlatformLinux : IOsPlatformSpecific
     public bool IsProcessElevated()
     {
         return false;
+    }
+
+    public void RemoveSymbolicLink(string path)
+    {
+    }
+
+    public void MakeSymbolicLink(string path, string targetPath)
+    {
+    }
+
+    public bool IsSymbolicLink(string path)
+    {
+        return false;
+    }
+
+    public string GetSymbolicLinkTarget(string path)
+    {
+        return string.Empty;
     }
 }

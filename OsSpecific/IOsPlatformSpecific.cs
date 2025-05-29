@@ -1,8 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
-using Microsoft.Win32;
 
-namespace tot_lib;
+namespace tot_lib.OsSpecific;
 
 public interface IOsPlatformSpecific
 {
@@ -10,6 +9,10 @@ public interface IOsPlatformSpecific
     bool SetLogonRun(string appName, string data);
     bool RemoveLogonRun(string appName);
     bool IsProcessElevated();
+    void RemoveSymbolicLink(string path);
+    void MakeSymbolicLink(string path, string targetPath);
+    bool IsSymbolicLink(string path);
+    string GetSymbolicLinkTarget(string path);
 }
 
 public static class OsPlatformSpecificExtensions
@@ -26,5 +29,14 @@ public static class OsPlatformSpecificExtensions
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             return new OsPlatformLinux();
         throw new NotSupportedException("OS not supported");
+    }
+
+    public static void RemoveAllSymbolicLinks(this IOsPlatformSpecific osSpecific, string directory)
+    {
+        foreach (string dir in Directory.GetDirectories(directory, "*", SearchOption.AllDirectories))
+        {
+            if (Directory.Exists(dir) && File.GetAttributes(dir).HasFlag(FileAttributes.ReparsePoint))
+                osSpecific.RemoveSymbolicLink(dir);
+        }
     }
 }
